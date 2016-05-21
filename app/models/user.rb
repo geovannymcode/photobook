@@ -8,3 +8,4 @@ end
 def name
       firstname + ' ' + lastname
 end
+has_many :posts

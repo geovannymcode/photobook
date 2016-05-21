@@ -1,9 +1,12 @@
 <article class="post">
-  <header class="post__header">
-    <p class="post__published right">
-      <%= time_ago_in_words(post.created_at) + " ago" %>
-    </p>
-  </header>
+<header class="post__header">
+  <p class="post__author left">
+    <%= post.user.username %>
+  </p>
+  <p class="post__published right">
+    <%= time_ago_in_words(post.created_at) + " ago" %>
+  </p>
+</header>
   <section class="post__content">
     <p class="post__photo">
       <%= link_to post do
