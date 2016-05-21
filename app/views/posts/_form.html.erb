@@ -24,6 +24,11 @@
     <%= f.text_area :description %>
   </div>
   <div class="actions">
-    <%= f.submit %>
-  </div>
+  <%= f.submit nil, class: "button" %>
+  <% if @post %>
+    <%= link_to 'Back', @post, class: "button secondary right" %>
+  <% else %>
+    <%= link_to 'Back', posts_path, class: "button secondary right" %>
+  <% end %>
+</div>
 <% end %>

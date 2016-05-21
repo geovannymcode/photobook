@@ -1,14 +1,6 @@
-<p id="notice"><%= notice %></p>
+<div class="post__links">
+   <%= link_to 'Edit', edit_post_path(@post), class: "button secondary" %>
+   <%= link_to 'Destroy', @post, class: "button alert right", method: :delete, data: { confirm: 'Are you sure?' } %>
+</div>
 
-<p>
-  <strong>Title:</strong>
-  <%= @post.title %>
-</p>
-
-<p>
-  <strong>Description:</strong>
-  <%= @post.description %>
-</p>
-
-<%= link_to 'Edit', edit_post_path(@post) %> |
-<%= link_to 'Back', posts_path %>
+<%= render 'post', post: @post %>

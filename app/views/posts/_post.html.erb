@@ -1,0 +1,23 @@
+<article class="post">
+  <header class="post__header">
+    <p class="post__published right">
+      <%= time_ago_in_words(post.created_at) + " ago" %>
+    </p>
+  </header>
+  <section class="post__content">
+    <p class="post__photo">
+      <%= link_to post do
+            image_tag post.photo.url(:large)
+          end
+      %>
+    </p>
+  </section>
+  <footer class="post__footer">
+    <h2 class="post__title">
+      <%= post.title %>
+    </h2>
+    <p class="post__description">
+      <%= post.description %>
+    </p>
+  </footer>
+</article>
