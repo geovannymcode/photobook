@@ -48,3 +48,7 @@ end
 gem 'foundation-rails', '~> 5.5', '>= 5.5.3.2'
 
 gem 'paperclip', '~> 4.3', '>= 4.3.2'
+
+gem 'devise', '~> 4.1', '>= 4.1.0'
+
+gem 'letter_opener', '~> 1.4', '>= 1.4.1'
