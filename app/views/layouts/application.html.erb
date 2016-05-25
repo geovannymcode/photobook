@@ -11,47 +11,52 @@
     <%= javascript_include_tag "application", 'data-turbolinks-track' => true %>
     <%= csrf_meta_tags %>
   </head>
-<nav class="top-bar" data-topbar role="navigation">
-  <ul class="title-area">
-    <li class="name">
-      <h1>
-  <%= link_to "Photobook", root_path %>
-</h1>
-    </li>
-    <!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
-    <li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
-  </ul>
 
-  <section class="top-bar-section">
-    <!-- Left Nav Section -->
-    <ul class="left">
-      <li><%= link_to 'Posts', posts_path %></li>
-    </ul>
-
-    <!-- Right Nav Section -->
-    <ul class="right">
-  <% if user_signed_in? %>
-    <li><%= link_to current_user.name, edit_user_registration_path %></li>
-    <li><%= link_to 'Sign Out', destroy_user_session_path, method: :delete %></li>
-  <% else %>
-    <li class="active"><%= link_to 'Sign Up', new_user_registration_path %></li>
-    <li><%= link_to 'Sign In', new_user_session_path %></li>
-  <% end %>
- </ul>
-  </section>
-</nav>
   <body>
-  <div class="row">
-    <div class="columns medium-6 medium-centered">
-      <%= yield %>
-      <br>
-<% flash.each do |type, message| %>
-<div data-alert class="alert-box radius <%= flass_class type %>">
-   <%= message %>
-   <a href="#" class="close">&times;</a>
-</div>
-<% end %>
+
+    <nav class="top-bar" data-topbar role="navigation">
+      <ul class="title-area">
+        <li class="name">
+          <h1>
+            <%= link_to "Photobook", root_path %>
+          </h1>
+        </li>
+         <!-- Remove the class "menu-icon" to get rid of menu icon. Take out "Menu" to just have icon alone -->
+        <li class="toggle-topbar menu-icon"><a href="#"><span>Menu</span></a></li>
+      </ul>
+
+      <section class="top-bar-section">
+        <!-- Left Nav Section -->
+        <ul class="left">
+          <li><%= link_to "Posts", posts_path %></li>
+        </ul>
+
+        <!-- Right Nav Section -->
+        <ul class="right">
+          <% if user_signed_in? %>
+            <li><%= link_to current_user.name, edit_user_registration_path %></li>
+            <li><%= link_to 'Sign Out', destroy_user_session_path, method: :delete %></li>
+          <% else %>
+            <li class="active"><%= link_to 'Sign Up', new_user_registration_path %></li>
+            <li><%= link_to 'Sign In', new_user_session_path %></li>
+          <% end %>
+        </ul>
+      </section>
+    </nav>
+
+    <div class="row">
+      <div class="columns medium-6 medium-centered">
+        <br>
+        <% flash.each do |type, message| %>
+        <div data-alert class="alert-box radius <%= flass_class type %>">
+          <%= message %>
+          <a href="#" class="close">&times;</a>
+        </div>
+        <% end %>
+
+        <%= yield %>
+      </div>
     </div>
-  </div>
-</body>
+
+  </body>
 </html>
