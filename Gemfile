@@ -41,6 +41,10 @@ group :development, :test do
   gem 'factory_girl_rails', '~> 4.7'
   
   gem 'faker', '~> 1.6'
+  
+  gem 'capybara', '~> 2.7'
+  
+  gem 'cucumber-rails', '~> 1.4', :require => false
 end
 
 group :development do
