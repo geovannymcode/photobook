@@ -1,3 +1,12 @@
+<p align="center">
+  <a href="#"><img src="https://img.shields.io/badge/Rails-4.2.5-red" alt="Rails"></a>
+  <a href="#"><img src="https://img.shields.io/badge/Database-SQLite3-blue" alt="SQLite3"></a>
+  <a href="#"><img src="https://img.shields.io/badge/SASS-5.0-green" alt="SASS"></a>
+  <a href="#"><img src="https://img.shields.io/badge/CoffeeScript-4.1-yellow" alt="CoffeeScript"></a>
+  <a href="#"><img src="https://img.shields.io/badge/Devise-4.1.0-orange" alt="Devise"></a>
+  <a href="#"><img src="https://img.shields.io/badge/Paperclip-4.3.2-purple" alt="Paperclip"></a>
+</p>
+
 
      ,-----.,--.                  ,--. ,---.   ,--.,------.  ,------.
     '  .--./|  | ,---. ,--.,--. ,-|  || o   \  |  ||  .-.  \ |  .---'
