@@ -18,3 +18,11 @@
 
 public/system/*
  
+
+/vendor/bundle
+/storage/*
+!/storage/.keep
+/db/*.sqlite3-*
+.env
+/config/master.key
+/public/assets

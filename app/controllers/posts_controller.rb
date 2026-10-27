@@ -1,76 +1,70 @@
 class PostsController < ApplicationController
-  before_action :set_post, only: [:show, :edit, :update, :destroy]
-  before_action :authenticate_user!, only: [:new, :create, :edit, :update]
+  before_action :authenticate_user!, except: [ :index, :show ]
+  before_action :set_post, only: [ :show, :edit, :update, :destroy ]
+  before_action :authorize_owner!, only: [ :edit, :update, :destroy ]
 
-  # GET /posts
-  # GET /posts.json
   def index
-    @posts = Post.order('created_at desc').limit(10)
+    @posts = Post.with_attached_photo.includes(:user).recent
   end
 
-  # GET /posts/1
-  # GET /posts/1.json
   def show
   end
 
-  # GET /posts/new
   def new
-    @post = Post.new
+    @post = current_user.posts.build
   end
 
-  # GET /posts/1/edit
   def edit
   end
 
-  # POST /posts
-  # POST /posts.json
   def create
-   @post = Post.new(post_params)
-  @post.user_id = current_user.id
-
+    @post = current_user.posts.build(post_params)
     respond_to do |format|
       if @post.save
-        format.html { redirect_to @post, notice: 'Post was successfully created.' }
+        format.html { redirect_to @post, notice: "Post was successfully created.", status: :see_other }
         format.json { render :show, status: :created, location: @post }
       else
-        format.html { render :new }
-        format.json { render json: @post.errors, status: :unprocessable_entity }
+        format.html { render :new, status: :unprocessable_content }
+        format.json { render json: @post.errors, status: :unprocessable_content }
       end
     end
   end
 
-  # PATCH/PUT /posts/1
-  # PATCH/PUT /posts/1.json
   def update
     respond_to do |format|
       if @post.update(post_params)
-        format.html { redirect_to @post, notice: 'Post was successfully updated.' }
-        format.json { render :show, status: :ok, location: @post }
+        format.html { redirect_to @post, notice: "Post was successfully updated.", status: :see_other }
+        format.json { render :show }
       else
-        format.html { render :edit }
-        format.json { render json: @post.errors, status: :unprocessable_entity }
+        format.html { render :edit, status: :unprocessable_content }
+        format.json { render json: @post.errors, status: :unprocessable_content }
       end
     end
   end
 
-  # DELETE /posts/1
-  # DELETE /posts/1.json
   def destroy
-    @post.destroy
+    @post.destroy!
     respond_to do |format|
-      format.html { redirect_to posts_url, notice: 'Post was successfully destroyed.' }
+      format.html { redirect_to posts_url, notice: "Post was successfully destroyed.", status: :see_other }
       format.json { head :no_content }
     end
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_post
-      @post = Post.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def post_params
-      params.require(:post).permit(:title, :photo, :description)
+  def set_post
+    @post = Post.find(params[:id])
+  end
+
+  def authorize_owner!
+    head :forbidden unless @post.user_id == current_user.id
+  end
+
+  def post_params
+    permitted = params.require(:post).permit(:title, :description, :photo)
+    if permitted[:photo].present? && !permitted[:photo].is_a?(ActionDispatch::Http::UploadedFile)
+      raise ActionController::BadRequest, "Photo must be a file upload"
     end
+    permitted
+  end
 end

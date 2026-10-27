@@ -1,0 +1,35 @@
+#!/bin/sh
+# Disposable production smoke test. Never mounts application data or publishes a port.
+set -eu
+container="photobook-check-$$"
+docker run --rm -d --name "$container" \
+  -e SECRET_KEY_BASE_DUMMY=1 -e APP_HOST=localhost -e SMTP_ADDRESS=localhost \
+  photobook:modernized >/dev/null
+trap 'docker stop "$container" >/dev/null 2>&1 || true' EXIT
+attempt=0
+until docker exec "$container" curl -fsS --max-time 2 -o /dev/null \
+  -H 'Host: localhost' -H 'X-Forwarded-Proto: https' http://127.0.0.1:3000/; do
+  attempt=$((attempt + 1))
+  if [ "$attempt" -ge 30 ]; then
+    docker logs "$container"
+    exit 1
+  fi
+  sleep 1
+done
+test "$(docker exec "$container" id -u)" = 1000
+docker exec -i "$container" bundle exec rails runner - <<'RUBY'
+require "vips"
+require "tempfile"
+Tempfile.create(["photobook-smoke", ".jpg"]) do |file|
+  Vips::Image.black(1200, 800).jpegsave(file.path)
+  user = User.create!(username: "container-check", firstname: "Test", lastname: "User", email: "container@example.com", password: "container-test123")
+  File.open(file.path, "rb") do |io|
+    post = user.posts.create!(title: "Container photo", photo: { io: io, filename: "smoke.jpg", content_type: "image/jpeg" })
+    [:large, :medium, :thumb].each { |name| post.photo.variant(name).processed }
+    blob = post.photo.blob
+    post.destroy!
+    raise "File was not purged" if blob.service.exist?(blob.key)
+  end
+end
+puts "Verified: production HTTP 200, UID 1000, SQLite, photo upload, three variants and purge."
+RUBY

@@ -1,11 +1,8 @@
-class AddAttachmentPhotoToPosts < ActiveRecord::Migration
-  def self.up
-    change_table :posts do |t|
-      t.attachment :photo
-    end
-  end
-
-  def self.down
-    remove_attachment :posts, :photo
+class AddAttachmentPhotoToPosts < ActiveRecord::Migration[4.2]
+  def change
+    add_column :posts, :photo_file_name, :string
+    add_column :posts, :photo_content_type, :string
+    add_column :posts, :photo_file_size, :integer
+    add_column :posts, :photo_updated_at, :datetime
   end
 end

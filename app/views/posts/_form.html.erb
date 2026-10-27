@@ -17,7 +17,7 @@
   </div>
   <div class="field">
   <%= f.label :photo %><br>
-  <%= f.file_field :photo %>
+  <%= f.file_field :photo, accept: Post::PHOTO_TYPES.join(",") %>
 </div>
   <div class="field">
     <%= f.label :description %><br>
@@ -25,7 +25,7 @@
   </div>
   <div class="actions">
   <%= f.submit nil, class: "button" %>
-  <% if @post %>
+  <% if @post.persisted? %>
     <%= link_to 'Back', @post, class: "button secondary right" %>
   <% else %>
     <%= link_to 'Back', posts_path, class: "button secondary right" %>

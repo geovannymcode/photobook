@@ -1,20 +1,12 @@
-class User < ActiveRecord::Base
-  # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable and :omniauthable
-  devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :trackable, :validatable
-  
-   
-   validates :username, presence: true
-   validates :firstname, presence: true, length: { minimum: 2}
-   validates :lastname, presence: true, length: { minimum: 2}
-   validates :email, presence: true
-   
+class User < ApplicationRecord
+  devise :database_authenticatable, :registerable, :recoverable,
+         :rememberable, :trackable, :validatable
 
+  has_many :posts, dependent: :destroy
+  validates :username, presence: true
+  validates :firstname, :lastname, presence: true, length: { minimum: 2 }
 
-
-def name
-      firstname + ' ' + lastname
-end
-has_many :posts
+  def name
+    [ firstname, lastname ].compact.join(" ")
+  end
 end
