@@ -6,7 +6,7 @@ Aplicación Rails para publicar fotografías. Los visitantes ven las diez public
 
 - Ruby **3.3.13** (`.ruby-version`), Bundler **2.5.22**.
 - Rails **8.1.4**, Devise **5.0.4**, SQLite **2.10.2** (gema), Puma **8.0.2**.
-- Active Storage y libvips para imágenes; Propshaft y CSS sin compilador Sass ni Node.
+- Active Storage, image_processing 2.2 y ruby-vips 2.3 (con libvips instalado) para imágenes; Propshaft y CSS sin compilador Sass ni Node.
 - RSpec Rails 8, FactoryBot y Capybara con RackTest.
 - Compilador C y headers para las gemas nativas. En macOS: Command Line Tools y `brew install vips`.
 
@@ -72,7 +72,7 @@ bundle exec bundler-audit check --update
 
 El script de migraciones usa exclusivamente una base SQLite temporal y prueba instalación desde migraciones, conservación de datos de 2016, detección de huérfanos, restricciones, rollback y reaplicación. Los antiguos escenarios Cucumber tienen equivalentes en `spec/features/signup_spec.rb`; ya no se necesita un segundo framework BDD ni Database Cleaner.
 
-GitHub Actions ejecuta estos controles en PR y pushes a `main`/`master`. Dependabot revisa RubyGems y acciones semanalmente. Los resultados locales están documentados en [MIGRATION.md](MIGRATION.md); no certifican el estado remoto de Dependabot.
+GitHub Actions comprueba primero la carga de `vips` y `image_processing/vips`, y ejecuta estos controles en PR y pushes a `main`/`master`. `ruby-vips` se declara explícitamente porque image_processing 2.x ya no instala automáticamente su backend. Dependabot revisa RubyGems y acciones semanalmente. Los resultados locales están documentados en [MIGRATION.md](MIGRATION.md); no certifican el estado remoto de Dependabot.
 
 ## Datos y fotografías legacy
 
