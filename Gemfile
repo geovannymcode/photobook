@@ -7,7 +7,7 @@ gem "puma", "~> 8.0"
 gem "propshaft"
 gem "devise", "~> 5.0.4"
 gem "jbuilder"
-gem "image_processing", "~> 1.14"
+gem "image_processing", "~> 2.2"
 
 group :development, :test do
   gem "rspec-rails", "~> 8.0"
