@@ -1,6 +1,7 @@
-<div class="post__links">
-   <%= link_to 'Edit', edit_post_path(@post), class: "button secondary" %>
-   <%= link_to 'Destroy', @post, class: "button alert right", method: :delete, data: { confirm: 'Are you sure?' } %>
-</div>
-
-<%= render 'post', post: @post %>
+<% if current_user == @post.user %>
+  <div class="post__links">
+    <%= link_to "Edit", edit_post_path(@post), class: "button" %>
+    <%= button_to "Destroy", @post, method: :delete, class: "button danger" %>
+  </div>
+<% end %>
+<%= render "post", post: @post %>

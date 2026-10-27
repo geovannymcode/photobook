@@ -1,20 +1,18 @@
-/*
- * This is a manifest file that'll be compiled into application.css, which will include all the files
- * listed below.
- *
- * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
- * or any plugin's vendor/assets/stylesheets directory can be referenced here using a relative path.
- *
- * You're free to add application-wide styles to this file and they'll appear at the bottom of the
- * compiled file so the styles you add here take precedence over styles defined in any styles
- * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
- * file per style scope.
- *
- *= require_tree .
- *= require_self
- *= require foundation_and_overrides
-
- */
-body{
-  background: rgb(250,250,250);
-}
+* { box-sizing: border-box; }
+body { margin: 0; background: #f5f6f8; color: #222; font: 1rem/1.6 system-ui, sans-serif; }
+nav { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem; padding: 1rem 5%; background: #fff; border-bottom: 1px solid #ddd; }
+a { color: #264da3; }
+.brand { font-size: 1.5rem; font-weight: bold; margin-right: auto; }
+main { max-width: 660px; margin: 2rem auto; padding: 0 1rem; }
+.post { background: white; border: 1px solid #ddd; border-radius: .5rem; overflow: hidden; margin: 1.5rem 0; }
+.post__header, .post__footer { padding: 1rem; }
+.post__photo { margin: 0; text-align: center; }
+img { max-width: 100%; height: auto; }
+.field { margin-bottom: 1rem; }
+input:not([type=checkbox]):not([type=submit]), textarea { width: 100%; padding: .65rem; border: 1px solid #777; border-radius: .25rem; font: inherit; }
+button, input[type=submit], .button { display: inline-block; background: #264da3; color: #fff; padding: .6rem 1rem; border: 0; border-radius: .25rem; cursor: pointer; font: inherit; text-decoration: none; }
+nav form, .post__links form { display: inline-block; }
+.flash, #error_explanation { padding: 1rem; background: #e6ecfa; }
+.alert, #error_explanation { border: 1px solid #a22; }
+.danger { background: #a22; }
+:focus-visible { outline: 3px solid #b66a00; outline-offset: 3px; }

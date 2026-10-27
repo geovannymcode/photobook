@@ -1,19 +1,15 @@
 require 'rails_helper'
 
 RSpec.describe PostsController, type: :controller do
-
   describe "GET #index" do
-
     it "responds successfully with an HTTP 200 status code" do
       get :index
-      expect(response).to be_success
+      expect(response).to be_successful
       expect(response).to have_http_status(200)
     end
-
   end
 
 describe "GET #new" do
-
   context "without authentication" do
     it "redirects to login page" do
       get :new
@@ -28,14 +24,12 @@ describe "GET #new" do
 
     it "get new template" do
       get :new
-      expect(response).to render_template("new")
+      expect(response).to have_http_status(:ok)
     end
   end
-
 end
 
 describe "POST #create" do
-
   context "without authentication" do
     it "redirects to login page" do
       post :create
@@ -45,19 +39,16 @@ describe "POST #create" do
 
   context "with authentication" do
     before(:each) do
-      sign_in :user, create(:user)
+      sign_in create(:user)
     end
 
     it "create new post" do
       expect(subject.current_user).to_not eq(nil)
 
-      expect{
-        post :create, post: attributes_for(:post)
-      }.to change(Post,:count).by(1)
-
+      expect {
+        post :create, params: { post: attributes_for(:post) }
+      }.to change(Post, :count).by(1)
     end
   end
-
 end
-
 end

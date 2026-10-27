@@ -1,7 +1,7 @@
 <article class="post">
 <header class="post__header">
   <p class="post__author left">
-    <%= post.user.username %>
+    <%= post.user&.username || "Unknown author" %>
   </p>
   <p class="post__published right">
     <%= time_ago_in_words(post.created_at) + " ago" %>
@@ -10,7 +10,7 @@
   <section class="post__content">
     <p class="post__photo">
       <%= link_to post do
-            image_tag post.photo.url(:large)
+            image_tag(post.photo.variant(:large), alt: post.title) if post.photo.attached?
           end
       %>
     </p>

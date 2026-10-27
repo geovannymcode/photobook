@@ -1,11 +1,10 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :user do
-    
-    username { Faker::Internet.user_name }
-    firstname { Faker::Name.first_name }
-    lastname { Faker::Name.last_name }
-    email { Faker::Internet.email }
-    password "password"
-    password_confirmation "password"
+    sequence(:username) { |n| "photographer#{n}" }
+    firstname { "Jon" }
+    lastname { "Snow" }
+    sequence(:email) { |n| "user#{n}@example.com" }
+    password { "password123" }
+    password_confirmation { "password123" }
   end
 end
