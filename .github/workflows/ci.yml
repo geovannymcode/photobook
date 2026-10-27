@@ -20,7 +20,8 @@ jobs:
           bundler: 2.5.22
           bundler-cache: true
       - name: Verify image processing dependencies
-        run: bundle exec ruby -rvips -rimage_processing/vips -e 'puts "libvips #{Vips.version_string}"'
+        run: |
+          bundle exec ruby -rvips -rimage_processing/vips -e 'puts "libvips #{Vips.version_string}"'
       - run: bin/rails db:prepare
       - run: bin/rails runner script/verify_migrations.rb
       - run: bin/rails zeitwerk:check
