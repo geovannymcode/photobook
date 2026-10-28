@@ -135,3 +135,30 @@ git ls-files --others --exclude-standard
 ```
 
 Después de revisar, el propietario puede preparar un commit y publicar la rama. Para abrir un PR tras autorizar/publicar, `gh pr create --head chore/modernize-dependencies --title "Modernize Photobook to Rails 8.1" --body-file MIGRATION.md` permite seleccionar la rama base predeterminada. Este comando no se ejecutó.
+
+
+## Corrección de CI: actualización de image_processing 2.2.0
+
+El fallo reportado corresponde al [PR #3 de Dependabot](https://github.com/geovannymcode/photobook/pull/3), ejecución [40590493312](https://github.com/geovannymcode/photobook/actions/runs/40590493312), revisión `81d6115bb1abc9b3bee38e3fda93e978a24936e6`. Falló `bin/rails runner script/verify_migrations.rb` al cargar `Post`, con `LoadError: cannot load such file -- vips`. El CI original de modernización y el push a master habían terminado correctamente; este fallo se produjo al actualizar image_processing de 1.14.0 a 2.2.0.
+
+Desde 2.0, image_processing convirtió ruby-vips y mini_magick en dependencias opcionales, como indica su [changelog oficial](https://github.com/janko/image_processing/blob/v2.2.0/CHANGELOG.md#200-2026-05-20). Instalar libvips mediante apt no instala la gema Ruby `ruby-vips`. Photobook usa esta gema directamente al validar las fotografías y debe declararla por sí mismo.
+
+Se actualiza image_processing a 2.2.0 y se declara `gem "ruby-vips", "~> 2.3", require: "vips"` como dependencia de runtime. El lockfile conserva ruby-vips 2.3.0 y elimina mini_magick, que no se utiliza. No se modifica la validación de fotografías ni se desactiva eager loading. El workflow incorpora una comprobación de ambos componentes antes de preparar la base:
+
+```sh
+bundle exec ruby -rvips -rimage_processing/vips -e 'puts "libvips #{Vips.version_string}"'
+```
+
+Validaciones locales ejecutadas con la corrección el 27/10/2026:
+
+- `bundle _2.5.22_ update image_processing ruby-vips`: instalación correcta; actualización limitada a estas dependencias.
+- Comprobación de carga: image_processing 2.2.0, ruby-vips 2.3.0 y libvips 8.18.7.
+- `CI=true RAILS_ENV=test bin/rails db:prepare`: correcto.
+- `CI=true RAILS_ENV=test bin/rails runner script/verify_migrations.rb`: correcto, incluidas conservación, huérfanos, restricciones y rollback.
+- `CI=true RAILS_ENV=test bin/rails zeitwerk:check`: correcto.
+- `CI=true bundle exec rspec`: 48 ejemplos, 0 fallos, seed 42323; incluye variantes, descarga de imágenes y purga.
+- `bundle exec rubocop --cache false`: 56 archivos, sin infracciones.
+- Brakeman 8.1.0: cero advertencias; bundler-audit: ninguna vulnerabilidad encontrada.
+- `git diff --check`: correcto.
+
+La corrección queda localmente en `chore/modernize-dependencies`, sin commit ni push. El PR #3 y su check remoto no se modificaron: hay que publicar/aplicar la corrección y volver a ejecutar CI antes de afirmar que esa actualización está aprobada en GitHub. No se ha reconstruido la imagen Docker para esta corrección; sus resultados anteriores corresponden a image_processing 1.14.0.
